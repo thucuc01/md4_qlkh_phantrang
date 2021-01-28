@@ -10,8 +10,12 @@
     <form>
         Search by first name:
         <input name="s" type="text"/>
-        <input type="submit" value="Search"/>
+        <input type="submit" th:value="Search"/>
     </form><br/>
+    <form>
+        Sort by Fisrt name :
+        <input type="submit" name="s1" th:value="SortByFirstName">
+    </form>
 <table border="1">
     <tr>
         <th>First name</th>

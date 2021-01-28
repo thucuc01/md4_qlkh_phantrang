@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,6 +33,8 @@ public class CustomerController {
     @GetMapping("/customers")
     public ModelAndView listCustomers(@RequestParam("s") Optional<String> s, Pageable pageable){
         Page<Customer> customers;
+        System.out.println(s);
+        
         if(s.isPresent()){
             customers = customerService.findAllByFirstNameContaining(s.get(), pageable);
         } else {
@@ -49,7 +53,10 @@ public class CustomerController {
     }
 
     @PostMapping("/create-customer")
-    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, Model model){
+    public ModelAndView saveCustomer(@Validated @ModelAttribute("customer") Customer customer, BindingResult bindingResult){
+        if(bindingResult.hasFieldErrors()){
+            return new ModelAndView("/customer/create");
+        }
         customerService.save(customer);
         System.out.println(customer.getId());
         ModelAndView modelAndView = new ModelAndView("/customer/create");
